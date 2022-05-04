@@ -1,11 +1,10 @@
 <template>
-  <Tutorial/>
+  <div class="container">
+    <Hero/>
+  </div>
 </template>
 
-<script lang="ts">
-import Vue from 'vue'
-
-export default Vue.extend({
-  name: 'IndexPage'
-})
+<script>
+  export default {}
 </script>
+<style></style>
