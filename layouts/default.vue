@@ -1,6 +1,8 @@
 <template>
   <div>
-    <Navigation />
+    <div class="app flex flex-column">
+      <Navigation/>
+    </div>
     <Nuxt/>
   </div>
 </template>
