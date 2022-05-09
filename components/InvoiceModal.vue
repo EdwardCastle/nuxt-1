@@ -1,7 +1,7 @@
 <template>
   <div @click="checkClick" ref="invoiceWrap" class="invoice-wrap flex flex-column">
     <form @submit.prevent="submitForm" class="invoice-content">
-      <Loading v-show="loading"/>
+      <!--      <Loading v-show="loading"/>-->
       <h1 v-if="!editInvoice">New Invoice</h1>
       <h1 v-else>Edit Invoice</h1>
 
@@ -123,6 +123,8 @@
 </template>
 
 <script>
+  import {mapMutations} from 'vuex'
+
   export default {
     name: "invoice-modal",
 
@@ -152,6 +154,12 @@
         invoiceItemList: [],
         invoiceTotal: 0,
       }
+    },
+    methods: {
+      closeInvoice() {
+        this.toggle_invoice()
+      },
+      ...mapMutations(['toggle_invoice'])
     }
   }
 </script>
@@ -166,8 +174,8 @@
     overflow: scroll;
 
     &::-webkit-scrollbar {
-      display: none;
-    }
+       display: none !important;
+      }
 
     @media (min-width: 900px) {
       left: 90px;
