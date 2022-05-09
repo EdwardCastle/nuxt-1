@@ -2,7 +2,10 @@
   <div>
     <div v-if="!mobile" class="app flex flex-column">
       <Navigation/>
-      <Nuxt/>
+      <div class="app-content flex flex column">
+        <InvoiceModal/>
+        <Nuxt/>
+      </div>
     </div>
     <div v-else class="mobile-message flex flex-column">
       <h2>Sorry this app is not supported on Mobile devices</h2>
@@ -12,7 +15,10 @@
 </template>
 
 <script>
+  import InvoiceModal from "~/components/InvoiceModal";
+
   export default {
+    components: {InvoiceModal},
     data() {
       return {
         mobile: false,
