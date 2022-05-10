@@ -1,9 +1,9 @@
 <template>
   <div @click="" ref="invoiceWrap" class="invoice-wrap flex flex-column">
     <form @submit.prevent="" class="invoice-content">
-      <Loading v-show="loading"/>
+<!--      <Loading v-show="loading"/>-->
       <h1>New Invoice</h1>
-<!--      <h1 v-else>Edit Invoice</h1>-->
+      <!--      <h1 v-else>Edit Invoice</h1>-->
       <!-- Bill From -->
       <div class="bill-from flex flex-column">
         <h4>Bill From</h4>
@@ -124,7 +124,7 @@
 
 <script>
   import {mapMutations} from 'vuex'
-
+  import {uid} from 'uid'
   export default {
     name: "invoice-modal",
 
@@ -171,6 +171,18 @@
     methods: {
       closeInvoice() {
         this.toggle_invoice()
+      },
+      addNewInvoiceItem() {
+        this.invoiceItemList.push({
+          id: uid(),
+          itemName: "",
+          qty: "",
+          price: 0,
+          total: 0
+        })
+      },
+      deleteInvoiceItem(id){
+        this.invoiceItemList = this.invoiceItemList.filter((item) => item.id !== id)
       },
       ...mapMutations(['toggle_invoice'])
 
