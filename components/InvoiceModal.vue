@@ -1,10 +1,9 @@
 <template>
-  <div @click="checkClick" ref="invoiceWrap" class="invoice-wrap flex flex-column">
-    <form @submit.prevent="submitForm" class="invoice-content">
-      <!--      <Loading v-show="loading"/>-->
-      <h1 v-if="!editInvoice">New Invoice</h1>
-      <h1 v-else>Edit Invoice</h1>
-
+  <div @click="" ref="invoiceWrap" class="invoice-wrap flex flex-column">
+    <form @submit.prevent="" class="invoice-content">
+      <Loading v-show="loading"/>
+      <h1>New Invoice</h1>
+<!--      <h1 v-else>Edit Invoice</h1>-->
       <!-- Bill From -->
       <div class="bill-from flex flex-column">
         <h4>Bill From</h4>
@@ -113,14 +112,15 @@
           <button type="button" @click="closeInvoice" class="red">Cancel</button>
         </div>
         <div class="right flex">
-          <button v-if="!editInvoice" type="submit" @click="saveDraft" class="dark-purple">Save Draft</button>
-          <button v-if="!editInvoice" type="submit" @click="publishInvoice" class="purple">Create Invoice</button>
-          <button v-if="editInvoice" type="sumbit" class="purple">Update Invoice</button>
+          <button type="submit" @click="" class="dark-purple">Save Draft</button>
+          <button type="submit" @click="" class="purple">Create Invoice</button>
+          <button type="sumbit" class="purple">Update Invoice</button>
         </div>
       </div>
     </form>
   </div>
 </template>
+
 
 <script>
   import {mapMutations} from 'vuex'
@@ -155,11 +155,25 @@
         invoiceTotal: 0,
       }
     },
+    created() {
+      this.invoiceDateUnix = Date.now()
+      this.invoiceDate = new Date(this.invoiceDateUnix).toLocaleDateString('en-us', this.dateOptions)
+    },
+    watch: {
+      paymentTerms() {
+        const futureDate = new Date()
+        this.paymentDueDateUnix = futureDate.setDate(futureDate.getDate() + parseInt(this.paymentTerms))
+        this.paymentDueDate = new Date(this.paymentDueDateUnix).toLocaleDateString('en-us', this.dateOptions)
+        console.log(this.paymentDueDate)
+
+      },
+    },
     methods: {
       closeInvoice() {
         this.toggle_invoice()
       },
       ...mapMutations(['toggle_invoice'])
+
     }
   }
 </script>
@@ -172,10 +186,11 @@
     width: 100%;
     height: 100vh;
     overflow: scroll;
+    scrollbar-width: none;
 
     &::-webkit-scrollbar {
-       display: none !important;
-      }
+      display: none !important;
+    }
 
     @media (min-width: 900px) {
       left: 90px;
