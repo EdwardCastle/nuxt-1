@@ -1,7 +1,7 @@
 <template>
   <div @click="" ref="invoiceWrap" class="invoice-wrap flex flex-column">
     <form @submit.prevent="submitForm" class="invoice-content">
-      <!--      <Loading v-show="loading"/>-->
+      <Loading v-show="loading"/>
       <h1>New Invoice</h1>
       <!--      <h1 v-else>Edit Invoice</h1>-->
       <!-- Bill From -->
@@ -134,7 +134,7 @@
       return {
         dateOptions: {year: "numeric", month: "short", day: "numeric"},
         docId: null,
-        loading: null,
+        loading: false,
         billerStreetAddress: null,
         billerCity: null,
         billerZipCode: null,
@@ -202,7 +202,7 @@
           alert('Ensure you fill out work items!')
           return
         }
-
+        this.loading = true
         this.calInvoiceTotal()
 
         const dataBase = db.collection('invoices').doc()
@@ -231,7 +231,7 @@
           invoiceDraft: this.invoiceDraft,
           invoicePaid: null,
         })
-
+        this.loading = false
         this.toggle_invoice()
 
       },
