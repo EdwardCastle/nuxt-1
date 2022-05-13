@@ -1,5 +1,5 @@
 <template>
-  <div @click="" ref="invoiceWrap" class="invoice-wrap flex flex-column">
+  <div @click="checkClick" ref="invoiceWrap" class="invoice-wrap flex flex-column">
     <form @submit.prevent="submitForm" class="invoice-content">
       <Loading v-show="loading"/>
       <h1>New Invoice</h1>
@@ -114,7 +114,7 @@
         <div class="right flex">
           <button type="submit" @click="saveDraft" class="dark-purple">Save Draft</button>
           <button type="submit" @click="publishInvoice" class="purple">Create Invoice</button>
-          <button type="sumbit" class="purple">Update Invoice</button>
+          <button type="submit" class="purple">Update Invoice</button>
         </div>
       </div>
     </form>
@@ -244,7 +244,12 @@
           this.invoiceTotal += item.total
         })
       },
-      ...mapMutations(['toggle_invoice'])
+      checkClick(e){
+        if (e.target === this.$refs.invoiceWrap){
+          this.toggle_modal()
+        }
+      },
+      ...mapMutations(['toggle_invoice', 'toggle_modal'])
 
     }
   }
