@@ -24,17 +24,23 @@
         </div>
       </div>
     </div>
+    <div>
+      <Invoice v-for="(invoice, index) in invoiceData" :invoice="invoice" :key="index"/>
+    </div>
   </div>
 </template>
 
 <script>
-  import {mapMutations} from 'vuex'
+  import {mapMutations, mapState} from 'vuex'
 
   export default {
     data() {
       return {
         filterMenu: null
       }
+    },
+    computed: {
+      ...mapState(['invoiceData'])
     },
     methods: {
       newInvoice() {
