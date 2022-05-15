@@ -1,6 +1,6 @@
 <template>
   <div v-if="currentInvoice" class="invoice-view container">
-    <router-link class="nav-link flex" :to="{ name: 'Home' }">
+    <router-link class="nav-link flex" to="/">
       <img src="@/assets/images/icon-arrow-left.svg" alt="" /> Go Back
     </router-link>
     <!-- Header -->
@@ -119,7 +119,12 @@
         this.set_current_invoice(this.$route.params.id)
         this.currentInvoice = this.currentInvoiceArray[0]
       },
-      ...mapMutations(['set_current_invoice'])
+      toggleEditInvoice(){
+        this.toggle_edit_invoice()
+        this.toggle_invoice()
+      },
+
+      ...mapMutations(['set_current_invoice', 'toggle_edit_invoice', 'toggle_invoice'])
 
     }
   }

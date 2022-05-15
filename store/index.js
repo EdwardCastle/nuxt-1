@@ -5,7 +5,8 @@ export const state = () => ({
   modalActive: null,
   invoiceData: [],
   invoicesLoaded: null,
-  currentInvoiceArray: null
+  currentInvoiceArray: null,
+  editInvoice: null
 })
 export const mutations = {
   toggle_invoice(state) {
@@ -20,10 +21,13 @@ export const mutations = {
   invoices_loaded(state, payload) {
     state.invoicesLoaded = true
   },
-  set_current_invoice(state, payload){
+  set_current_invoice(state, payload) {
     state.currentInvoiceArray = state.invoiceData.filter(invoice => {
       return invoice.invoiceId === payload
     })
+  },
+  toggle_edit_invoice(state) {
+    state.editInvoice = !state.editInvoice
   }
 }
 

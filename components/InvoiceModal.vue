@@ -2,8 +2,8 @@
   <div @click="checkClick" ref="invoiceWrap" class="invoice-wrap flex flex-column">
     <form @submit.prevent="submitForm" class="invoice-content">
       <Loading v-show="loading"/>
-      <h1>New Invoice</h1>
-      <!--      <h1 v-else>Edit Invoice</h1>-->
+      <h1 v-if="!editInvoice">New Invoice</h1>
+      <h1 v-else>Edit Invoice</h1>
       <!-- Bill From -->
       <div class="bill-from flex flex-column">
         <h4>Bill From</h4>
@@ -124,7 +124,7 @@
 
 <script>
   import db from '~/firebase/firebaseInit'
-  import {mapMutations} from 'vuex'
+  import {mapMutations, mapState} from 'vuex'
   import {uid} from 'uid'
 
   export default {
@@ -155,11 +155,38 @@
         invoiceDraft: null,
         invoiceItemList: [],
         invoiceTotal: 0,
+        currentInvoice: null
       }
     },
     created() {
-      this.invoiceDateUnix = Date.now()
-      this.invoiceDate = new Date(this.invoiceDateUnix).toLocaleDateString('en-us', this.dateOptions)
+      if (!this.editInvoice) {
+        this.invoiceDateUnix = Date.now()
+        this.invoiceDate = new Date(this.invoiceDateUnix).toLocaleDateString('en-us', this.dateOptions)
+      }
+      if (this.editInvoice) {
+        const currentInvoice = this.currentInvoiceArray[0]
+        this.docId = currentInvoice.docId;
+        this.billerStreetAddress = currentInvoice.billerStreetAddress;
+        this.billerCity = currentInvoice.billerCity;
+        this.billerZipCode = currentInvoice.billerZipCode;
+        this.billerCountry = currentInvoice.billerCountry;
+        this.clientName = currentInvoice.clientName;
+        this.clientEmail = currentInvoice.clientEmail;
+        this.clientStreetAddress = currentInvoice.clientStreetAddress;
+        this.clientCity = currentInvoice.clientCity;
+        this.clientZipCode = currentInvoice.clientZipCode;
+        this.clientCountry = currentInvoice.clientCountry;
+        this.invoiceDateUnix = currentInvoice.invoiceDateUnix;
+        this.invoiceDate = currentInvoice.invoiceDate;
+        this.paymentTerms = currentInvoice.paymentTerms;
+        this.paymentDueDateUnix = currentInvoice.paymentDueDateUnix;
+        this.paymentDueDate = currentInvoice.paymentDueDate;
+        this.productDescription = currentInvoice.productDescription;
+        this.invoicePending = currentInvoice.invoicePending;
+        this.invoiceDraft = currentInvoice.invoiceDraft;
+        this.invoiceItemList = currentInvoice.invoiceItemList;
+        this.invoiceTotal = currentInvoice.invoiceTotal;
+      }
     },
     watch: {
       paymentTerms() {
@@ -170,9 +197,15 @@
 
       },
     },
+    computed: {
+      ...mapState(['editInvoice', 'currentInvoiceArray'])
+    },
     methods: {
       closeInvoice() {
         this.toggle_invoice()
+        if (this.editInvoice) {
+          this.toggle_edit_invoice()
+        }
       },
 
       addNewInvoiceItem() {
@@ -244,12 +277,12 @@
           this.invoiceTotal += item.total
         })
       },
-      checkClick(e){
-        if (e.target === this.$refs.invoiceWrap){
+      checkClick(e) {
+        if (e.target === this.$refs.invoiceWrap) {
           this.toggle_modal()
         }
       },
-      ...mapMutations(['toggle_invoice', 'toggle_modal'])
+      ...mapMutations(['toggle_invoice', 'toggle_modal', 'toggle_edit_invoice'])
 
     }
   }

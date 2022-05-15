@@ -11,9 +11,12 @@
 </template>
 
 <script>
-import  {mapMutations} from 'vuex'
+import  {mapMutations, mapState} from 'vuex'
 export default {
   name: "modal",
+  computed: {
+    ...mapState(['editInvoice'])
+  },
   methods: {
     closeModal(){
       this.toggle_modal()
@@ -21,8 +24,11 @@ export default {
     closeInvoice(){
       this.toggle_modal()
       this.toggle_invoice()
+      if (this.editInvoice){
+        this.toggle_edit_invoice()
+      }
     },
-    ...mapMutations(['toggle_modal', 'toggle_invoice'])
+    ...mapMutations(['toggle_modal', 'toggle_invoice', 'toggle_edit_invoice'])
   }
 };
 </script>
