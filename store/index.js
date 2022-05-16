@@ -28,6 +28,10 @@ export const mutations = {
   },
   toggle_edit_invoice(state) {
     state.editInvoice = !state.editInvoice
+  },
+  delete_invoice(state, payload) {
+    state.invoiceData = state.invoiceData.filter(invoice => invoice.docId !== payload)
+
   }
 }
 
@@ -66,5 +70,12 @@ export const actions = {
       }
     })
     commit('invoices_loaded')
+  },
+  async update_invoice({commit, dispatch}, {docId, routeId}) {
+    commit('delete_invoice', docId)
+    await dispatch('get_invoices')
+    commit('set_current_invoice', routeId)
+    commit('toggle_invoice')
+    commit('toggle_edit_invoice')
   }
 }

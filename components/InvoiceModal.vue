@@ -124,7 +124,7 @@
 
 <script>
   import db from '~/firebase/firebaseInit'
-  import {mapMutations, mapState} from 'vuex'
+  import {mapMutations, mapState, mapActions} from 'vuex'
   import {uid} from 'uid'
 
   export default {
@@ -268,7 +268,44 @@
         this.toggle_invoice()
 
       },
+      async updateInvoice() {
+        if (this.invoiceItemList.length <= 0) {
+          alert('Ensure you fill out work items!')
+          return
+        }
+        this.loading = true
+        this.calInvoiceTotal()
+        const dataBase = db.collection('invoices').doc(this.docId)
+        await dataBase.update({
+          billerStreetAddress: this.billerStreetAddress,
+          billerCity: this.billerCity,
+          billerZipCode: this.billerZipCode,
+          billerCountry: this.billerCountry,
+          clientName: this.clientName,
+          clientEmail: this.clientEmail,
+          clientStreetAddress: this.clientStreetAddress,
+          clientCity: this.clientCity,
+          clientZipCode: this.clientZipCode,
+          clientCountry: this.clientCountry,
+          paymentTerms: this.paymentTerms,
+          paymentDueDate: this.paymentDueDate,
+          paymentDueDateUnix: this.paymentDueDateUnix,
+          productDescription: this.productDescription,
+          invoiceItemList: this.invoiceItemList,
+          invoiceTotal: this.invoiceTotal,
+        });
+        this.loading = false;
+        const data = {
+          docId: this.docId,
+          routeId: this.$route.params.invoiceId,
+        };
+        this.update_invoice(data);
+      },
       submitForm() {
+        if (this.editInvoice) {
+          this.updateInvoice()
+          return
+        }
         this.uploadInvoice()
       },
       calInvoiceTotal() {
@@ -282,7 +319,8 @@
           this.toggle_modal()
         }
       },
-      ...mapMutations(['toggle_invoice', 'toggle_modal', 'toggle_edit_invoice'])
+      ...mapMutations(['toggle_invoice', 'toggle_modal', 'toggle_edit_invoice']),
+      ...mapActions(['update_invoice'])
 
     }
   }
